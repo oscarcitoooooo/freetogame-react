@@ -49,6 +49,20 @@ function App() {
     if (sortOrder === 'za') {
      return b.title.localeCompare(a.title)
     }
+
+    if (sortOrder === 'newest') {
+     return (
+     new Date(b.release_date).getTime() -
+     new Date(a.release_date).getTime()
+    )
+  }
+ 
+    if (sortOrder === 'oldest') {
+     return (
+     new Date(a.release_date).getTime() -
+     new Date(b.release_date).getTime()
+    )
+  }
  
     return 0
   })
@@ -99,6 +113,8 @@ function App() {
        <option value="default">Orden original</option>
        <option value="az">Nombre A-Z</option>
        <option value="za">Nombre Z-A</option>
+       <option value="newest">Más recientes</option>
+       <option value="oldest">Más antiguos</option>
       </select>
 
       <p className="results-count">
