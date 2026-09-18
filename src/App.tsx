@@ -26,6 +26,10 @@ function App() {
       })
   }, [])
 
+  const genres = Array.from(
+    new Set(games.map((game) => game.genre))
+ ).sort()
+
   const filteredGames = games.filter((game) => {
     const matchesSearch = game.title
       .toLowerCase()
@@ -99,9 +103,12 @@ function App() {
         onChange={(event) => setGenre(event.target.value)}
       >
         <option>Todos</option>
-        <option>Shooter</option>
-        <option>MMORPG</option>
-        <option>ARPG</option>
+
+          {genres.map((gameGenre) => (
+        <option key={gameGenre} value={gameGenre}>
+          {gameGenre}
+        </option>
+))}
       </select>
 
       <select
