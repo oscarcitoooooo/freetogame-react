@@ -146,6 +146,7 @@ function App() {
               publisher={game.publisher}
               developer={game.developer}
               releaseDate={game.release_date}
+              gameUrl={game.game_url}
             />
           ))
         ) : (

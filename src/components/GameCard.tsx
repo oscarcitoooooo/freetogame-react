@@ -9,6 +9,7 @@ type GameCardProps = {
   publisher: string
   developer: string
   releaseDate: string
+  gameUrl: string
 }
 
 function GameCard({
@@ -20,6 +21,7 @@ function GameCard({
   publisher,
   developer,
   releaseDate,
+  gameUrl,
 }: GameCardProps) {
   return (
     <article className="game-card">
@@ -31,6 +33,12 @@ function GameCard({
       <p>Publisher: {publisher}</p>
       <p>Desarrollador: {developer}</p>
       <p>Fecha de lanzamiento:{releaseDate}</p>
+      <a href={gameUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      > 
+      Jugar ahora
+      </a>
     </article>
   )
 }
