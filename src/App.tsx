@@ -71,6 +71,12 @@ function App() {
     return 0
   })
 
+  const hasActiveFilters =
+  search !== '' ||
+  genre !== 'Todos' ||
+  platform !== 'Todas' ||
+  sortOrder !== 'default'
+
   const clearFilters = () => {
    setSearch('')
    setGenre('Todos')
@@ -132,6 +138,11 @@ function App() {
       </select>
 
       <button onClick={clearFilters}>Limpiar filtros</button>
+      {hasActiveFilters && (
+      <p className="active-filters">
+        Hay filtros activos
+      </p>
+)}
 
       <p className="results-count">
         {filteredGames.length}{' '}
