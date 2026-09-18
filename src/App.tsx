@@ -12,6 +12,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [genre, setGenre] = useState('Todos')
   const [platform, setPlatform] = useState('Todas')
+  const [sortOrder, setSortOrder] = useState('default')
 
   useEffect(() => {
     getGames()
@@ -34,9 +35,22 @@ function App() {
       genre === 'Todos' || game.genre === genre
 
     const matchesPlatform =
-      platform === 'Todas' || game.platform === platform  
-
+      platform === 'Todas' || game.platform === platform
+      
     return matchesSearch && matchesGenre && matchesPlatform
+
+  })
+
+  const sortedGames = [...filteredGames].sort((a, b) => {
+   if (sortOrder === 'az') {
+     return a.title.localeCompare(b.title)
+    }
+ 
+    if (sortOrder === 'za') {
+     return b.title.localeCompare(a.title)
+    }
+ 
+    return 0
   })
 
   if (loading) {
@@ -78,6 +92,15 @@ function App() {
        <option>Web Browser</option>
       </select>
 
+      <select
+       value={sortOrder}
+       onChange={(event) => setSortOrder(event.target.value)}
+      >
+       <option value="default">Orden original</option>
+       <option value="az">Nombre A-Z</option>
+       <option value="za">Nombre Z-A</option>
+      </select>
+
       <p className="results-count">
         {filteredGames.length}{' '}
         {filteredGames.length === 1
@@ -86,8 +109,8 @@ function App() {
       </p>
 
       <section className="games-grid">
-        {filteredGames.length > 0 ? (
-          filteredGames.map((game) => (
+          {sortedGames.length > 0 ? (
+            sortedGames.map((game) => (
             <GameCard
               key={game.id}
               title={game.title}
