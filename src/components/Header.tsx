@@ -1,6 +1,8 @@
+import './Header.css'
+
 function Header() {
   return (
-    <header>
+    <header className="header">
       <h1>FreeToGame</h1>
       <p>Explora videojuegos gratuitos</p>
     </header>
