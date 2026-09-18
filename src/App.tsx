@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import GameCard from './components/GameCard'
@@ -27,22 +28,35 @@ const games = [
 ]
 
 function App() {
-  return (
-  <main>
-  <Header />
+  const [search, setSearch] = useState('')
 
-  <section className="games-grid">
-    {games.map((game) => (
-      <GameCard
-        key={game.id}
-        title={game.title}
-        genre={game.genre}
-        platform={game.platform}
-        thumbnail={game.thumbnail}
+  const filteredGames = games.filter((game) =>
+    game.title.toLowerCase().includes(search.toLowerCase())
+  )
+
+  return (
+    <main>
+      <Header />
+
+      <input
+        type="text"
+        placeholder="Buscar videojuego..."
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
       />
-    ))}
-  </section>
-</main>
+
+      <section className="games-grid">
+        {filteredGames.map((game) => (
+          <GameCard
+            key={game.id}
+            title={game.title}
+            genre={game.genre}
+            platform={game.platform}
+            thumbnail={game.thumbnail}
+          />
+        ))}
+      </section>
+    </main>
   )
 }
 
