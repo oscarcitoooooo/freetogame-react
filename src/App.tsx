@@ -28,19 +28,21 @@ const games = [
 
 function App() {
   return (
-    <main>
-      <Header />
+  <main>
+  <Header />
 
-      {games.map((game) => (
-        <GameCard
-          key={game.id}
-          title={game.title}
-          genre={game.genre}
-          platform={game.platform}
-          thumbnail={game.thumbnail}
-        />
-      ))}
-    </main>
+  <section className="games-grid">
+    {games.map((game) => (
+      <GameCard
+        key={game.id}
+        title={game.title}
+        genre={game.genre}
+        platform={game.platform}
+        thumbnail={game.thumbnail}
+      />
+    ))}
+  </section>
+</main>
   )
 }
 
