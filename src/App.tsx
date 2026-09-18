@@ -81,6 +81,7 @@ function App() {
               genre={game.genre}
               platform={game.platform}
               thumbnail={game.thumbnail}
+              description={game.short_description}
             />
           ))
         ) : (
