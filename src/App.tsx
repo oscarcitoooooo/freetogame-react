@@ -29,10 +29,18 @@ const games = [
 
 function App() {
   const [search, setSearch] = useState('')
+  const [genre, setGenre] = useState('Todos')
 
-  const filteredGames = games.filter((game) =>
-    game.title.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredGames = games.filter((game) => {
+    const matchesSearch = game.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+
+    const matchesGenre =
+      genre === 'Todos' || game.genre === genre
+
+    return matchesSearch && matchesGenre
+  })
 
   return (
     <main>
@@ -45,6 +53,16 @@ function App() {
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
+
+      <select
+        value={genre}
+        onChange={(event) => setGenre(event.target.value)}
+      >
+        <option>Todos</option>
+        <option>Shooter</option>
+        <option>MMORPG</option>
+        <option>ARPG</option>
+      </select>
 
       <section className="games-grid">
         {filteredGames.map((game) => (
