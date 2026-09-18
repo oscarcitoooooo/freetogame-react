@@ -11,6 +11,7 @@ function App() {
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
   const [genre, setGenre] = useState('Todos')
+  const [platform, setPlatform] = useState('Todas')
 
   useEffect(() => {
     getGames()
@@ -32,7 +33,10 @@ function App() {
     const matchesGenre =
       genre === 'Todos' || game.genre === genre
 
-    return matchesSearch && matchesGenre
+    const matchesPlatform =
+      platform === 'Todas' || game.platform === platform  
+
+    return matchesSearch && matchesGenre && matchesPlatform
   })
 
   if (loading) {
@@ -63,6 +67,15 @@ function App() {
         <option>Shooter</option>
         <option>MMORPG</option>
         <option>ARPG</option>
+      </select>
+
+      <select
+       value={platform}
+       onChange={(event) => setPlatform(event.target.value)}
+      >
+       <option>Todas</option>
+       <option>PC (Windows)</option>
+       <option>Web Browser</option>
       </select>
 
       <p className="results-count">
