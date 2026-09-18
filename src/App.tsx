@@ -65,7 +65,8 @@ function App() {
       </select>
 
       <section className="games-grid">
-        {filteredGames.map((game) => (
+        {filteredGames.length > 0 ? (
+          filteredGames.map((game) => (
           <GameCard
             key={game.id}
             title={game.title}
@@ -73,7 +74,10 @@ function App() {
             platform={game.platform}
             thumbnail={game.thumbnail}
           />
-        ))}
+        ))
+        ) : (
+        <p>No se encontraron videojuegos.</p>
+      )}
       </section>
     </main>
   )
