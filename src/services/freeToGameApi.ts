@@ -10,7 +10,8 @@ export const getGames = async (): Promise<Game[]> => {
     throw new Error('Error al obtener los videojuegos')
   }
  
-  return response.json()
+  const games: Game[] = await response.json()
+return games
 }
  
 export const getGameById = async (
