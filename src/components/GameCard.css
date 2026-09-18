@@ -1,0 +1,15 @@
+.game-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.game-card img {
+  width: 100%;
+}
+
+.game-card h2,
+.game-card p {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
