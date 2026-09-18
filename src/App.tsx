@@ -76,7 +76,7 @@ function App() {
           />
         ))
         ) : (
-        <p>No se encontraron videojuegos.</p>
+        <p className="no-results">No se encontraron videojuegos.</p>
       )}
       </section>
     </main>
