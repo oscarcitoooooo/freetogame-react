@@ -10,6 +10,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [genre, setGenre] = useState('Todos')
   const [platform, setPlatform] = useState('Todas')
   const [sortOrder, setSortOrder] = useState('default')
@@ -26,6 +27,16 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+     setDebouncedSearch(search)
+    }, 400)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [search])
+
   const genres = Array.from(
     new Set(games.map((game) => game.genre))
  ).sort()
@@ -33,7 +44,7 @@ function App() {
   const filteredGames = games.filter((game) => {
     const matchesSearch = game.title
       .toLowerCase()
-      .includes(search.toLowerCase())
+      .includes(debouncedSearch.toLowerCase())
 
     const matchesGenre =
       genre === 'Todos' || game.genre === genre
