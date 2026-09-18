@@ -1,3 +1,5 @@
+import './GameCard.css'
+
 type GameCardProps = {
   title: string
   genre: string
@@ -7,7 +9,7 @@ type GameCardProps = {
 
 function GameCard({ title, genre, platform, thumbnail }: GameCardProps) {
   return (
-    <article>
+    <article className="game-card">
       <h2>{title}</h2>
       <img src={thumbnail} alt={title} />
       <p>Género: {genre}</p>
