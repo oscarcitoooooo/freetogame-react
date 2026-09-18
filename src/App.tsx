@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Header from './components/Header'
-import GameCard from './components/GameCard'
-import { getGames } from './services/freeToGameApi'
+import GameDetails from './components/GameDetails'
+import GameFilters from './components/GameFilters'
+import GameList from './components/GameList'
+import { getGameById, getGames } from './services/freeToGameApi'
+import { sortGames } from './utils/gameUtils'
 import type { Game } from './types/Game'
+import type { GameDetails as GameDetailsType } from './types/GameDetails'
 
 function App() {
   const [games, setGames] = useState<Game[]>([])
@@ -14,6 +18,8 @@ function App() {
   const [genre, setGenre] = useState('Todos')
   const [platform, setPlatform] = useState('Todas')
   const [sortOrder, setSortOrder] = useState('default')
+  const [selectedGame, setSelectedGame] =
+    useState<GameDetailsType | null>(null)
 
   useEffect(() => {
     getGames()
@@ -29,7 +35,7 @@ function App() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-     setDebouncedSearch(search)
+      setDebouncedSearch(search)
     }, 400)
 
     return () => {
@@ -39,7 +45,7 @@ function App() {
 
   const genres = Array.from(
     new Set(games.map((game) => game.genre))
- ).sort()
+  ).sort()
 
   const filteredGames = games.filter((game) => {
     const matchesSearch = game.title
@@ -51,48 +57,32 @@ function App() {
 
     const matchesPlatform =
       platform === 'Todas' || game.platform.includes(platform)
-      
+
     return matchesSearch && matchesGenre && matchesPlatform
-
   })
 
-  const sortedGames = [...filteredGames].sort((a, b) => {
-   if (sortOrder === 'az') {
-     return a.title.localeCompare(b.title)
-    }
- 
-    if (sortOrder === 'za') {
-     return b.title.localeCompare(a.title)
-    }
-
-    if (sortOrder === 'newest') {
-     return (
-     new Date(b.release_date).getTime() -
-     new Date(a.release_date).getTime()
-    )
-  }
- 
-    if (sortOrder === 'oldest') {
-     return (
-     new Date(a.release_date).getTime() -
-     new Date(b.release_date).getTime()
-    )
-  }
- 
-    return 0
-  })
+  const sortedGames = sortGames(filteredGames, sortOrder)
 
   const hasActiveFilters =
-  search !== '' ||
-  genre !== 'Todos' ||
-  platform !== 'Todas' ||
-  sortOrder !== 'default'
+    search !== '' ||
+    genre !== 'Todos' ||
+    platform !== 'Todas' ||
+    sortOrder !== 'default'
 
   const clearFilters = () => {
-   setSearch('')
-   setGenre('Todos')
-   setPlatform('Todas')
-   setSortOrder('default')
+    setSearch('')
+    setGenre('Todos')
+    setPlatform('Todas')
+    setSortOrder('default')
+  }
+
+  const handleViewDetails = async (id: number) => {
+    try {
+      const gameDetails = await getGameById(id)
+      setSelectedGame(gameDetails)
+    } catch {
+      setError('No se pudo cargar el detalle del videojuego')
+    }
   }
 
   if (loading) {
@@ -103,57 +93,35 @@ function App() {
     return <p>{error}</p>
   }
 
+  if (selectedGame) {
+    return (
+      <main>
+        <Header />
+        <GameDetails
+          game={selectedGame}
+          onBack={() => setSelectedGame(null)}
+        />
+      </main>
+    )
+  }
+
   return (
     <main>
       <Header />
 
-      <input
-        className="search-input"
-        type="text"
-        placeholder="Buscar videojuego..."
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
+      <GameFilters
+        search={search}
+        genre={genre}
+        platform={platform}
+        sortOrder={sortOrder}
+        genres={genres}
+        hasActiveFilters={hasActiveFilters}
+        onSearchChange={setSearch}
+        onGenreChange={setGenre}
+        onPlatformChange={setPlatform}
+        onSortChange={setSortOrder}
+        onClearFilters={clearFilters}
       />
-
-      <select
-        value={genre}
-        onChange={(event) => setGenre(event.target.value)}
-      >
-        <option>Todos</option>
-
-          {genres.map((gameGenre) => (
-        <option key={gameGenre} value={gameGenre}>
-          {gameGenre}
-        </option>
-))}
-      </select>
-
-      <select
-       value={platform}
-       onChange={(event) => setPlatform(event.target.value)}
-      >
-       <option>Todas</option>
-       <option>PC (Windows)</option>
-       <option>Web Browser</option>
-      </select>
-
-      <select
-       value={sortOrder}
-       onChange={(event) => setSortOrder(event.target.value)}
-      >
-       <option value="default">Orden original</option>
-       <option value="az">Nombre A-Z</option>
-       <option value="za">Nombre Z-A</option>
-       <option value="newest">Más recientes</option>
-       <option value="oldest">Más antiguos</option>
-      </select>
-
-      <button onClick={clearFilters}>Limpiar filtros</button>
-      {hasActiveFilters && (
-      <p className="active-filters">
-        Hay filtros activos
-      </p>
-)}
 
       <p className="results-count">
         {filteredGames.length}{' '}
@@ -162,28 +130,10 @@ function App() {
           : 'videojuegos encontrados'}
       </p>
 
-      <section className="games-grid">
-          {sortedGames.length > 0 ? (
-            sortedGames.map((game) => (
-            <GameCard
-              key={game.id}
-              title={game.title}
-              genre={game.genre}
-              platform={game.platform}
-              thumbnail={game.thumbnail}
-              description={game.short_description}
-              publisher={game.publisher}
-              developer={game.developer}
-              releaseDate={game.release_date}
-              gameUrl={game.game_url}
-            />
-          ))
-        ) : (
-          <p className="no-results">
-            No se encontraron videojuegos.
-          </p>
-        )}
-      </section>
+      <GameList
+        games={sortedGames}
+        onViewDetails={handleViewDetails}
+      />
     </main>
   )
 }
