@@ -35,7 +35,7 @@ function App() {
       genre === 'Todos' || game.genre === genre
 
     const matchesPlatform =
-      platform === 'Todas' || game.platform === platform
+      platform === 'Todas' || game.platform.includes(platform)
       
     return matchesSearch && matchesGenre && matchesPlatform
 
