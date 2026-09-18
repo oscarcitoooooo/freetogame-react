@@ -67,6 +67,13 @@ function App() {
     return 0
   })
 
+  const clearFilters = () => {
+   setSearch('')
+   setGenre('Todos')
+   setPlatform('Todas')
+   setSortOrder('default')
+  }
+
   if (loading) {
     return <p>Cargando videojuegos...</p>
   }
@@ -116,6 +123,8 @@ function App() {
        <option value="newest">Más recientes</option>
        <option value="oldest">Más antiguos</option>
       </select>
+
+      <button onClick={clearFilters}>Limpiar filtros</button>
 
       <p className="results-count">
         {filteredGames.length}{' '}
