@@ -7,6 +7,7 @@ type GameCardProps = {
   thumbnail: string
   description: string
   publisher: string
+  developer: string
 }
 
 function GameCard({
@@ -16,6 +17,7 @@ function GameCard({
   thumbnail,
   description,
   publisher,
+  developer,
 }: GameCardProps) {
   return (
     <article className="game-card">
@@ -25,6 +27,7 @@ function GameCard({
       <p>Género: {genre}</p>
       <p>Plataforma: {platform}</p>
       <p>Publisher: {publisher}</p>
+      <p>Desarrollador: {developer}</p>
     </article>
   )
 }

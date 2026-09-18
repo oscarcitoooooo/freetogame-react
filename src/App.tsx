@@ -83,6 +83,7 @@ function App() {
               thumbnail={game.thumbnail}
               description={game.short_description}
               publisher={game.publisher}
+              developer={game.developer}
             />
           ))
         ) : (
