@@ -3,11 +3,15 @@ import type { Game } from '../types/Game'
 
 type GameListProps = {
   games: Game[]
+  favoriteIds: number[]
+  onToggleFavorite: (id: number) => void
   onViewDetails: (id: number) => void
 }
 
 function GameList({
   games,
+  favoriteIds,
+  onToggleFavorite,
   onViewDetails,
 }: GameListProps) {
   return (
@@ -26,6 +30,8 @@ function GameList({
             developer={game.developer}
             releaseDate={game.release_date}
             gameUrl={game.game_url}
+            isFavorite={favoriteIds.includes(game.id)}
+            onToggleFavorite={onToggleFavorite}
             onViewDetails={onViewDetails}
           />
         ))
