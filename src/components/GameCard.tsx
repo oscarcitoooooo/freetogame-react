@@ -8,6 +8,7 @@ type GameCardProps = {
   description: string
   publisher: string
   developer: string
+  releaseDate: string
 }
 
 function GameCard({
@@ -18,6 +19,7 @@ function GameCard({
   description,
   publisher,
   developer,
+  releaseDate,
 }: GameCardProps) {
   return (
     <article className="game-card">
@@ -28,6 +30,7 @@ function GameCard({
       <p>Plataforma: {platform}</p>
       <p>Publisher: {publisher}</p>
       <p>Desarrollador: {developer}</p>
+      <p>Fecha de lanzamiento:{releaseDate}</p>
     </article>
   )
 }

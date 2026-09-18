@@ -84,6 +84,7 @@ function App() {
               description={game.short_description}
               publisher={game.publisher}
               developer={game.developer}
+              releaseDate={game.release_date}
             />
           ))
         ) : (
