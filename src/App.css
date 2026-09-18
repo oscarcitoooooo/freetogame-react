@@ -23,3 +23,9 @@ main {
   font-size: 1.2rem;
   color: #64748b;
 }
+
+.results-count {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #475569;
+}

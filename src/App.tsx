@@ -64,6 +64,11 @@ function App() {
         <option>ARPG</option>
       </select>
 
+      <p className="results-count">
+        {filteredGames.length}{' '}
+        {filteredGames.length === 1 ? 'videojuego encontrado' : 'videojuegos encontrados'}
+      </p>
+
       <section className="games-grid">
         {filteredGames.length > 0 ? (
           filteredGames.map((game) => (
