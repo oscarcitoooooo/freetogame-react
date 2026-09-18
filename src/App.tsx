@@ -39,6 +39,7 @@ function App() {
       <Header />
 
       <input
+        className="search-input"
         type="text"
         placeholder="Buscar videojuego..."
         value={search}
