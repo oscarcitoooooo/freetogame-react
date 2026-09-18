@@ -2,12 +2,14 @@ type GameCardProps = {
   title: string
   genre: string
   platform: string
+  thumbnail: string
 }
 
-function GameCard({ title, genre, platform }: GameCardProps) {
+function GameCard({ title, genre, platform, thumbnail }: GameCardProps) {
   return (
     <article>
       <h2>{title}</h2>
+      <img src={thumbnail} alt={title} />
       <p>Género: {genre}</p>
       <p>Plataforma: {platform}</p>
     </article>
