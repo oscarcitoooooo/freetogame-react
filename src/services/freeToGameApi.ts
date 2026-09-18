@@ -1,4 +1,5 @@
 import type { Game } from '../types/Game'
+import type { GameDetails } from '../types/GameDetails'
  
 const BASE_URL = 'https://www.freetogame.com/api'
  
@@ -7,6 +8,18 @@ export const getGames = async (): Promise<Game[]> => {
  
   if (!response.ok) {
     throw new Error('Error al obtener los videojuegos')
+  }
+ 
+  return response.json()
+}
+ 
+export const getGameById = async (
+  id: number
+): Promise<GameDetails> => {
+  const response = await fetch(`${BASE_URL}/game?id=${id}`)
+ 
+  if (!response.ok) {
+    throw new Error('Error al obtener el videojuego')
   }
  
   return response.json()
