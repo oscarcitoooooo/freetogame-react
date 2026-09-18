@@ -4,10 +4,11 @@ import Header from './components/Header'
 import GameDetails from './components/GameDetails'
 import GameFilters from './components/GameFilters'
 import GameList from './components/GameList'
+import { useFavorites } from './hooks/useFavorites'
 import { getGameById, getGames } from './services/freeToGameApi'
-import { sortGames } from './utils/gameUtils'
 import type { Game } from './types/Game'
 import type { GameDetails as GameDetailsType } from './types/GameDetails'
+import { filterGames, sortGames } from './utils/gameUtils'
 
 function App() {
   const [games, setGames] = useState<Game[]>([])
@@ -20,6 +21,12 @@ function App() {
   const [sortOrder, setSortOrder] = useState('default')
   const [selectedGame, setSelectedGame] =
     useState<GameDetailsType | null>(null)
+
+  const {
+    favoriteIds,
+    favoriteCount,
+    toggleFavorite,
+  } = useFavorites()
 
   useEffect(() => {
     getGames()
@@ -47,18 +54,10 @@ function App() {
     new Set(games.map((game) => game.genre))
   ).sort()
 
-  const filteredGames = games.filter((game) => {
-    const matchesSearch = game.title
-      .toLowerCase()
-      .includes(debouncedSearch.toLowerCase())
-
-    const matchesGenre =
-      genre === 'Todos' || game.genre === genre
-
-    const matchesPlatform =
-      platform === 'Todas' || game.platform.includes(platform)
-
-    return matchesSearch && matchesGenre && matchesPlatform
+  const filteredGames = filterGames(games, {
+    search: debouncedSearch,
+    genre,
+    platform,
   })
 
   const sortedGames = sortGames(filteredGames, sortOrder)
@@ -123,6 +122,10 @@ function App() {
         onClearFilters={clearFilters}
       />
 
+      <p className="favorites-count">
+        Favoritos: {favoriteCount}
+      </p>
+
       <p className="results-count">
         {filteredGames.length}{' '}
         {filteredGames.length === 1
@@ -132,6 +135,8 @@ function App() {
 
       <GameList
         games={sortedGames}
+        favoriteIds={favoriteIds}
+        onToggleFavorite={toggleFavorite}
         onViewDetails={handleViewDetails}
       />
     </main>
