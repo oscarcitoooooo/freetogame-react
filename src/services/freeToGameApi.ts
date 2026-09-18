@@ -23,5 +23,6 @@ export const getGameById = async (
     throw new Error('Error al obtener el videojuego')
   }
  
-  return response.json()
+  const game: GameDetails = await response.json()
+return game
 }
