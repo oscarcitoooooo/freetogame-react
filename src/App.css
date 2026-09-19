@@ -1,31 +1,86 @@
 main {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 2rem;
 }
-
+ 
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  
 }
-
-.search-input {
+ 
+.game-filters {
+  display: grid;
+  grid-template-columns: minmax(250px, 2fr) repeat(3, minmax(150px, 1fr)) auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+ 
+.search-input,
+.game-filters select,
+.game-filters button {
   width: 100%;
+  min-height: 44px;
   padding: 0.8rem 1rem;
   border-radius: 8px;
   border: 1px solid #cbd5e1;
-  margin-bottom: 2rem;
 }
-
+ 
+.search-input {
+  margin: 0;
+}
+ 
+.game-filters button {
+  cursor: pointer;
+}
+ 
+.active-filters {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+ 
 .no-results {
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
   color: #64748b;
 }
-
+ 
 .results-count {
   margin-bottom: 1rem;
   font-weight: 600;
   color: #475569;
+}
+ 
+/* Tablets */
+@media (max-width: 900px) {
+  .game-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+ 
+/* Celulares */
+@media (max-width: 600px) {
+  main {
+    padding: 1rem;
+  }
+ 
+  .game-filters {
+    grid-template-columns: 1fr;
+  }
+ 
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+ 
+  .no-results {
+    padding: 1rem;
+    font-size: 1rem;
+  }
 }
