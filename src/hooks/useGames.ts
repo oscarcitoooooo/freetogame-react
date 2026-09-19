@@ -8,7 +8,40 @@ export const useGames = () => {
   const [error, setError] = useState('')
   const controllerRef = useRef<AbortController | null>(null)
 
-  const loadGames = useCallback(async () => {
+  useEffect(() => {
+    const controller = new AbortController()
+    controllerRef.current = controller
+
+    const loadInitialGames = async () => {
+      try {
+        const data = await getGames(controller.signal)
+
+        if (!controller.signal.aborted) {
+          setGames(data)
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return
+        }
+
+        if (!controller.signal.aborted) {
+          setError('No se pudieron cargar los videojuegos')
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    void loadInitialGames()
+
+    return () => {
+      controller.abort()
+    }
+  }, [])
+
+  const retry = useCallback(async () => {
     controllerRef.current?.abort()
 
     const controller = new AbortController()
@@ -19,13 +52,18 @@ export const useGames = () => {
 
     try {
       const data = await getGames(controller.signal)
-      setGames(data)
+
+      if (!controller.signal.aborted) {
+        setGames(data)
+      }
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return
       }
 
-      setError('No se pudieron cargar los videojuegos')
+      if (!controller.signal.aborted) {
+        setError('No se pudieron cargar los videojuegos')
+      }
     } finally {
       if (!controller.signal.aborted) {
         setLoading(false)
@@ -33,18 +71,10 @@ export const useGames = () => {
     }
   }, [])
 
-  useEffect(() => {
-    loadGames()
-
-    return () => {
-      controllerRef.current?.abort()
-    }
-  }, [loadGames])
-
   return {
     games,
     loading,
     error,
-    retry: loadGames,
+    retry,
   }
 }
