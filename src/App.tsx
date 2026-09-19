@@ -5,15 +5,19 @@ import GameDetails from './components/GameDetails'
 import GameFilters from './components/GameFilters'
 import GameList from './components/GameList'
 import { useFavorites } from './hooks/useFavorites'
-import { getGameById, getGames } from './services/freeToGameApi'
-import type { Game } from './types/Game'
+import { useGames } from './hooks/useGames'
+import { getGameById } from './services/freeToGameApi'
 import type { GameDetails as GameDetailsType } from './types/GameDetails'
 import { filterGames, sortGames } from './utils/gameUtils'
 
 function App() {
-  const [games, setGames] = useState<Game[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const {
+    games,
+    loading,
+    error,
+    retry,
+  } = useGames()
+
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [genre, setGenre] = useState('Todos')
@@ -27,18 +31,6 @@ function App() {
     favoriteCount,
     toggleFavorite,
   } = useFavorites()
-
-  useEffect(() => {
-    getGames()
-      .then((data) => {
-        setGames(data)
-        setLoading(false)
-      })
-      .catch(() => {
-        setError('No se pudieron cargar los videojuegos')
-        setLoading(false)
-      })
-  }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -80,7 +72,7 @@ function App() {
       const gameDetails = await getGameById(id)
       setSelectedGame(gameDetails)
     } catch {
-      setError('No se pudo cargar el detalle del videojuego')
+      setSelectedGame(null)
     }
   }
 
@@ -89,13 +81,22 @@ function App() {
   }
 
   if (error) {
-    return <p>{error}</p>
+    return (
+      <section>
+        <p>{error}</p>
+
+        <button onClick={retry}>
+          Reintentar
+        </button>
+      </section>
+    )
   }
 
   if (selectedGame) {
     return (
       <main>
         <Header />
+
         <GameDetails
           game={selectedGame}
           onBack={() => setSelectedGame(null)}
